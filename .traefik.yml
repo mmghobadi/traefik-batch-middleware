@@ -1,10 +1,10 @@
-displayName: Dynamic Request Batcher
+displayName: Batch Middleware
 type: middleware
 import: github.com/mmghobadi/traefik-batch-middleware
 summary: A middleware plugin for dynamic request batching and prioritization
 testData:
   maxBatchSize: 50
   batchTimeout: "2s"
-  highPriorityHeader: "X-Priority"
+  highPriorityHeader: "X-Event-Urgency"
   priorityThreshold: 8
   enableMetrics: true
