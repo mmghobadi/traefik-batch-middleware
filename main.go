@@ -76,7 +76,7 @@ func New(ctx context.Context, next http.Handler, config *Config, name string) (h
 func (r *RequestBatcher) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 	// Extract route identifier (you might want to customize this based on your needs)
 	routeID := req.URL.Path
-
+	req.Header.Add("X-Recieved-Time", time.Now().Format(time.RFC3339))
 	// Create batch request
 	batchReq := &BatchRequest{
 		OriginalRequest: req,
@@ -150,6 +150,7 @@ func (r *RequestBatcher) processBatch(batch *Batch) {
 	for _, req := range batch.Requests {
 		go func(batchReq *BatchRequest) {
 			defer wg.Done()
+			batchReq.OriginalRequest.Header.Add("X-Exit-Time", time.Now().Format(time.RFC3339))
 			r.next.ServeHTTP(batchReq.ResponseWriter, batchReq.OriginalRequest)
 		}(req)
 	}
